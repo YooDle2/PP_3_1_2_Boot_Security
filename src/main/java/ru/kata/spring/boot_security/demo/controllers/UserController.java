@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.models.User;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping
 public class UserController {
-
-    @GetMapping
+    @GetMapping("/")
+    public String empty() {
+        return "redirect:/login";
+    }
+    @GetMapping("/user")
     public String userInfo(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", user.getRoles());

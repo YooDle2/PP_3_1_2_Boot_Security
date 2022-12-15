@@ -37,17 +37,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(int id) {
-        User user = null;
+        return userRepository.findById(id).orElseThrow();
+        /*User user = null;
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             user = optionalUser.get();
         }
-        return user;
+        return user;*/
     }
 
     @Override
     public void update(User user) {
-        user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
+        if (user.getPassword().isEmpty()) {
+            user.setPassword(userRepository.findByUsername(user.getUsername()).getPassword());
+        } else {
+            user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
+        }
+//        user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
     }
 
